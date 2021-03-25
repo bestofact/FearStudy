@@ -17,6 +17,12 @@ namespace FearStudy
         private static Dictionary<String, float> OvercomeSuccess = new Dictionary<String, float>();
 
 
+        /// <summary>
+        /// Only this function will be called by main program.
+        /// </summary>
+        /// <param name="study_csv_path">
+        /// Study csv path relative to solution path.
+        /// </param>
         public static void Run(string study_csv_path)
         {
             StudyCsvPath = study_csv_path;
@@ -26,16 +32,22 @@ namespace FearStudy
             FilterScreen();
             CalculateOvercomeSuccess();
             OvercomeSuccessScreen();
-            
-            
         }
 
 
+
+
+
+        /// <summary>
+        /// Interaction screen with user that allows user to filter fears.
+        /// </summary>
         private static void FilterScreen()
         {
             String Input;
             List<String> AcceptedInputs;
 
+            // Include mode will allow us to exlude or include filtered fears.
+            // Ask for an input until user choses 0 or 1 as an input.
             Input = "A";
             AcceptedInputs = new List<String>{ "0","1" };
             while(!AcceptedInputs.Contains(Input))
@@ -46,11 +58,13 @@ namespace FearStudy
                 Input = Console.ReadLine();
                 Console.Clear();
             }
+            // Clear accepted inputs since we will have new rules for next input session.
             AcceptedInputs.Clear();
             Boolean IncludeMode = Input == "1";
 
 
-            
+            // A table like string for all known fears.
+            // Every index is an accepted input for this input session. So we must add them to our list.
             String FearListAsString = "";
             foreach (String fear in KnownFears)
             {
@@ -58,6 +72,8 @@ namespace FearStudy
                 AcceptedInputs.Add($"{KnownFears.IndexOf(fear)}");
             }
 
+            // When we extract accepted inputs from selected fear indexes ( user input ), if we get a list with at least one member
+            //  it means that our selected fear indexes has an unaccepted input. So continue the loop.
             List<String> SelectedFearIndexes = new List<String> {""};
             while( SelectedFearIndexes.Except(AcceptedInputs).Count() != 0)
             {
@@ -69,15 +85,17 @@ namespace FearStudy
                 Input = Console.ReadLine();
                 SelectedFearIndexes = new List<String>(Input.Split(','));
 
+                // When no input is given, (direclty pressed to 'Enter'), make program select none index.
                 if (Input == "") { SelectedFearIndexes.Clear(); }
                 Console.Clear();
             }
-
+            // This function recreates the KnownFears list with filtered values.
             FilterKnownFears(SelectedFearIndexes, IncludeMode);
-            
         }
 
-
+        /// <summary>
+        /// Result screen at the end of the program. Shows filtered fears and theirs overcome success percentages.
+        /// </summary>
         private static void OvercomeSuccessScreen()
         {
             foreach(KeyValuePair<String,float> overcome_rate in OvercomeSuccess)
@@ -85,6 +103,10 @@ namespace FearStudy
                 Console.WriteLine($"Fear, Overcome Success = {overcome_rate.Key} , {overcome_rate.Value}%");
             }
         }
+
+
+
+
 
 
 
@@ -108,7 +130,6 @@ namespace FearStudy
                         Individual individual = new Individual(X, SurveyResultForIndividual_X);
                         AddIndividual(individual);
                     }
-                    
                     ++X;
                 }
             }
@@ -187,40 +208,27 @@ namespace FearStudy
 
 
 
-        private static void AddIndividual(Individual individual)
-        {
-            Subjects.Add(individual);
-        }
-        private static void RemoveIndividual(Individual individual)
-        {
-            if (Subjects.Contains(individual)) { Subjects.Remove(individual); }
-        }
-        private static void AddKnownFear_Unique(String fear)
-        {
-            if(!KnownFears.Contains(fear)) { KnownFears.Add(fear); }
-        }
-        private static void RemoveKnownFear(String fear)
-        {
-            if (KnownFears.Contains(fear)) { KnownFears.Remove(fear); }
-        }
-        private static void AddOvercomeSuccess(String fear, float overcome_success)
-        {
-            OvercomeSuccess.Add(fear, overcome_success);
-        }
+        //Bunch of Add/Remove functions that I used for our static variables. They are not necessary but I believe
+        // using this methods will be a good practise when I start working with big projects.
+        private static void AddIndividual(Individual individual) { Subjects.Add(individual); }
+        private static void RemoveIndividual(Individual individual) { if (Subjects.Contains(individual)) { Subjects.Remove(individual); } }
 
+        private static void AddKnownFear_Unique(String fear) { if(!KnownFears.Contains(fear)) { KnownFears.Add(fear); } }
+        private static void RemoveKnownFear(String fear) { if (KnownFears.Contains(fear)) { KnownFears.Remove(fear); } }
+
+        private static void AddOvercomeSuccess(String fear, float overcome_success) { OvercomeSuccess.Add(fear, overcome_success); }
+
+
+        // Returns full path of StudyCsvPath assuming StudyCsvPath is relative to solution path.
         private static String StudyCsvFullPath()
         {
             return Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"..\\..\\..\\{StudyCsvPath}"));
-        }
-
-
-
-                
+        }       
     }
 
 
-    
-
+    // I used an Individual class to make it more easy to work with. So that I don't use dictionaries to hold individuals 
+    //  surveys like json files.
     class Individual
     {
         public int Index;
@@ -232,7 +240,16 @@ namespace FearStudy
         public Boolean Overcome;
         public Boolean Embarrassed;
 
-
+        /// <summary>
+        /// Creates an individual with survey_result.
+        /// </summary>
+        /// <param name="survey_index">
+        /// It is like id of this individual. 
+        /// Not necessery for the main purpose of our program but it is cleaner for me to have it.
+        /// </param>
+        /// <param name="survey_result">
+        /// Order must be : {'Fear', 'Greatest', 'Impact', 'Past', 'Encounter', 'Overcome', 'Embarrassed'}
+        /// </param>
         public Individual(int survey_index, string survey_result)
         {
             Index = survey_index;
@@ -247,11 +264,18 @@ namespace FearStudy
             Embarrassed = result_list[6] == "Yes";
         }
 
+        /// <summary>
+        /// Returns the fear or greatest (when fear is 'other') of Individual. 
+        /// </summary>
         public String GetFear()
         {
             return Fear == "Other" ? Greatest : Fear;
         }
 
+        /// <summary>
+        /// A info function for me to use when i debug individual class to see if it works or not.
+        /// Not necessary for program to work now but good to keep it in here.
+        /// </summary>
         public String Info()
         {
             var Title = $"==================\nInfo for Person {Index}\n------------------";

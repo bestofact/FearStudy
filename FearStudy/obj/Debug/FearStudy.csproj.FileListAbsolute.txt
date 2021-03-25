@@ -1,0 +1,7 @@
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\obj\Debug\FearStudy.csprojAssemblyReference.cache
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\obj\Debug\FearStudy.csproj.CoreCompileInputs.cache
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\bin\Debug\FearStudy.exe.config
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\bin\Debug\FearStudy.exe
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\bin\Debug\FearStudy.pdb
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\obj\Debug\FearStudy.exe
+C:\Users\anilc\Desktop\Ders\Bahar2020-2021\BLG252E - Object Oriente Programming\midterm\FearStudy\FearStudy\obj\Debug\FearStudy.pdb
